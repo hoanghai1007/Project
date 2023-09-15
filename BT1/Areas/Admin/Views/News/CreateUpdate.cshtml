@@ -1,0 +1,100 @@
+﻿@{
+    //import file layout.cshtml vào đây
+    Layout = "~/Areas/Admin/Views/Shared/Layout.cshtml";
+    //Khởi tạo các biến
+    string Name = Model != null ? Model.Name : "";
+    string Description = Model != null ? Model.Description : "";
+    string Content = Model != null ? Model.Content : "";
+
+}
+
+<div class="col-md-12">
+    @* muốn Upload được file thì trong thẻ form phải có thuộc tính sau: enctype:"multipart/form-data"*@
+    <div class="panel panel-primary">
+        <div class="panel-heading" style="background-color:#337ab7; line-height:40px; color:white;padding-left:10px;">Add edit news</div>
+        <div class="panel-body">
+            <form method="post" enctype="multipart/form-data" action="@ViewBag.action">
+                <!-- rows -->
+                <div class="row" style="margin-top:5px;">
+                    <div class="col-md-2">Name</div>
+                    <div class="col-md-10">
+                        <input type="text" value="@Name" name="Name" class="form-control" required>
+                    </div>
+                </div>
+                <!-- rows -->
+                <div class="row" style="margin-top:5px;">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-10">
+                        @{
+                            string strChecked = "";
+                            if (Model != null && Model.Hot == 1)
+                            {
+                                strChecked = "checked";
+                            }
+                        }
+                        <input type="checkbox" @strChecked id="Hot" name="Hot" /> <label for="Hot">Hot</label>
+                    </div>
+                </div>
+                <!-- end rows -->
+                <!-- rows -->
+                <div class="row" style="margin-top:5px;">
+                    <div class="col-md-2">Photo</div>
+                    <div class="col-md-10">
+                        <input type="file" name="Photo" />
+                    </div>
+                </div>
+                <!-- end rows -->
+                <!--fix độ rộng của ckeditor -->
+                <style>
+                    .ck-editor__editable{
+                        min-height:300px;
+                        max-height:300px;
+                        overflow:scroll;
+                    }
+                </style>
+                <!-- end rows -->
+                <!-- rows -->
+                <div class="row" style="margin-top:5px;">
+                    <div class="col-md-2">Description</div>
+                    <div class="col-md-10">
+                        <textarea name="Description" id="Description">@Description</textarea>
+                        <script>
+                            ClassicEditor.create(document.querySelector('#Description'));
+                        </script>
+                    </div>
+                </div>
+                <!-- end rows -->
+                <!-- rows -->
+                <div class="row" style="margin-top:5px;">
+                    <div class="col-md-2">Content</div>
+                    <div class="col-md-10">
+                        <textarea name="Content" id="Content">@Content</textarea>
+                        <script>
+                            ClassicEditor.create(document.querySelector('#Content'));
+                        </script>
+                    </div>
+                </div>
+                <!-- end rows -->
+                <!-- rows -->
+                <div class="row" style="margin-top:5px;">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-10">
+                        <input type="submit" value="Process" class="btn btn-primary">
+                    </div>
+                </div>
+                <!-- end rows -->
+            </form>
+            <style type="text/css">
+                .panel-primary {
+                    border-color: #337ab7
+                }
+                    .panel-body{
+                    border: 1px solid #337ab7;
+                    }
+                    .col-md-2{
+                        padding-left:30px;
+                    }
+            </style>
+        </div>
+    </div>
+</div>

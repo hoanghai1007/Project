@@ -1,0 +1,184 @@
+﻿@using BT1_project.Models
+@using X.PagedList.Mvc.Core
+@model X.PagedList.IPagedList<ItemProduct>
+@{
+    Layout = "~/Views/Shared/Layout2.cshtml";
+}
+<div class="col-lg-9 order-1 order-lg-2">
+    <!-- Begin Li's Banner Area -->
+    <div class="single-banner shop-page-banner">
+        <a href="#">
+            <img src="~/Frontend/images/bg-banner/2.jpg" alt="Li's Static Banner">
+        </a>
+    </div>
+    <!-- Li's Banner Area End Here -->
+    <!-- shop-top-bar start -->
+    <div class="shop-top-bar mt-30">
+        <div class="shop-bar-inner">
+            <div class="toolbar-amount">
+                <span>Search: @ViewBag.key</span>
+            </div>
+        </div>
+        <!-- product-select-box start -->
+        <div class="product-select-box">
+            <div class="product-short">
+            </div>
+        </div>
+    </div>
+
+    <div class="shop-products-wrapper">
+        <div class="tab-content">
+            <div id="grid-view" class="tab-pane fade active show" role="tabpanel">
+                <div class="product-area shop-product-area">
+                    <div class="row">
+                        @foreach (var item in Model)
+                        {
+                            <div class="col-lg-4 col-md-4 col-sm-6 mt-40">
+                                <!-- single-product-wrap start -->
+                                <div class="single-product-wrap">
+                                    <div class="product-image">
+                                        <a href="/Products/Detail/@item.Id">
+                                            <img src="~/Upload/Products/@item.Photo" alt="@item.Name">
+                                        </a>
+                                        <span class="sticker">New</span>
+                                    </div>
+                                    <div class="product_desc">
+                                        <div class="product_desc_info">
+                                            <div class="product-review">
+                                                <h5 class="manufacturer">
+                                                    <a href="/Products/Detail/@item.Id">@item.Name</a>
+                                                </h5>
+                                                <div class="rating-box">
+                                                    <ul class="rating">
+                                                        <li>
+                                                            <a href="/Products/Rating/@item.Id?star=1"><i class="fa fa-star-o"></i></a>
+                                                            <a href="/Products/Rating/@item.Id?star=2"><i class="fa fa-star-o"></i></a>
+                                                            <a href="/Products/Rating/@item.Id?star=3"><i class="fa fa-star-o"></i></a>
+                                                            <a href="/Products/Rating/@item.Id?star=4"><i class="fa fa-star-o"></i></a>
+                                                            <a href="/Products/Rating/@item.Id?star=5"><i class="fa fa-star-o"></i></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <h4><a class="product_name" href="/Products/Detail/@item.Id">@item.Name</a></h4>
+                                            <div class="price-box">
+                                                <span class="new-price">$@item.Price</span>
+                                            </div>
+                                        </div>
+                                        <div class="add-actions">
+                                            <ul class="add-actions-link">
+                                                <li class="add-cart active"><a href="/Cart/Buy/@item.Id">Add to cart</a></li>
+                                                <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
+                                                <li><a class="links-details" href="Wishlist/Add/@item.Id"><i class="fa fa-heart-o"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- single-product-wrap end -->
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="wrap-pagination-info">
+                <ul class="page-numbers">
+                    <br />
+                    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+                    @Html.PagedListPager(Model, page => Url.Action("SearchName", new { page = page, key=ViewBag.key }) )
+
+                </ul>
+            </div>
+            <style type="text/css">
+                .pagination {
+                    display: inline-block;
+                    padding-left: 0;
+                    margin: 20px 0;
+                    border-radius: 4px
+                }
+
+                    .pagination > li {
+                        display: inline
+                    }
+
+                        .pagination > li > a, .pagination > li > span {
+                            position: relative;
+                            float: left;
+                            padding: 6px 12px;
+                            margin-left: -1px;
+                            line-height: 1.42857143;
+                            color: #337ab7;
+                            text-decoration: none;
+                            background-color: #fff;
+                            border: 1px solid #ddd
+                        }
+
+                            .pagination > li > a:focus, .pagination > li > a:hover, .pagination > li > span:focus, .pagination > li > span:hover {
+                                z-index: 2;
+                                color: #23527c;
+                                background-color: #eee;
+                                border-color: #ddd
+                            }
+
+                        .pagination > li:first-child > a, .pagination > li:first-child > span {
+                            margin-left: 0;
+                            border-top-left-radius: 4px;
+                            border-bottom-left-radius: 4px
+                        }
+
+                        .pagination > li:last-child > a, .pagination > li:last-child > span {
+                            border-top-right-radius: 4px;
+                            border-bottom-right-radius: 4px
+                        }
+
+                    .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+                        z-index: 3;
+                        color: #fff;
+                        cursor: default;
+                        background-color: #337ab7;
+                        border-color: #337ab7
+                    }
+
+                    .pagination > .disabled > a, .pagination > .disabled > a:focus, .pagination > .disabled > a:hover, .pagination > .disabled > span, .pagination > .disabled > span:focus, .pagination > .disabled > span:hover {
+                        color: #777;
+                        cursor: not-allowed;
+                        background-color: #fff;
+                        border-color: #ddd
+                    }
+
+                .pagination-lg > li > a, .pagination-lg > li > span {
+                    padding: 10px 16px;
+                    font-size: 18px;
+                    line-height: 1.3333333
+                }
+
+                .pagination-lg > li:first-child > a, .pagination-lg > li:first-child > span {
+                    border-top-left-radius: 6px;
+                    border-bottom-left-radius: 6px
+                }
+
+                .pagination-lg > li:last-child > a, .pagination-lg > li:last-child > span {
+                    border-top-right-radius: 6px;
+                    border-bottom-right-radius: 6px
+                }
+
+                .pagination-sm > li > a, .pagination-sm > li > span {
+                    padding: 5px 10px;
+                    font-size: 12px;
+                    line-height: 1.5
+                }
+
+                .pagination-sm > li:first-child > a, .pagination-sm > li:first-child > span {
+                    border-top-left-radius: 3px;
+                    border-bottom-left-radius: 3px
+                }
+
+                .pagination-sm > li:last-child > a, .pagination-sm > li:last-child > span {
+                    border-top-right-radius: 3px;
+                    border-bottom-right-radius: 3px
+                }
+            </style>
+        </div>
+    </div>
+    <!-- shop-products-wrapper end -->
+</div>
+

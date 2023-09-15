@@ -1,0 +1,274 @@
+﻿@using BT1_project.Models
+@{
+    List<Item> cart = Cart.GetCart(Context.Session) ?? new List<Item>();
+}
+
+<header>
+    <!-- Begin Header Top Area -->
+    <div class="header-top">
+        <div class="container">
+            <div class="row">
+                <!-- Begin Header Top Left Area -->
+                <div class="col-lg-3 col-md-4">
+                    <div class="header-top-left">
+                        <ul class="phone-wrap">
+                            <li><span>Telephone Enquiry:</span><a href="#">(+123) 123 321 345</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Header Top Left Area End Here -->
+                <!-- Begin Header Top Right Area -->
+                <div class="col-lg-9 col-md-8">
+                    <div class="header-top-right">
+                        <ul class="ht-menu">
+                            <!-- Begin Setting Area -->
+                            <li>
+                                <div class="ht-setting-trigger"><span>Setting</span></div>
+                                <div class="setting ht-setting">
+                                    <ul class="ht-setting-list">
+
+                                        @*kiểm tra người dùng đã đăng nhập chưa*@
+                                        @if (!String.IsNullOrEmpty(Context.Session.GetString("customer_email")))
+                                        {
+                                            <li class="menu-item"><a href="#">Xin chào @Context.Session.GetString("customer_name")</a></li>
+                                            <li class="menu-item"><a title="Register or Login" href="/Account/Logout">Logout</a></li>
+
+                                        }
+                                        else
+                                        {
+                                            <li class="menu-item"><a title="Register or Login" href="/Account/Login">Login</a></li>
+                                            <li class="menu-item"><a title="Register or Login" href="/Account/Register">Register</a></li>
+                                        }
+                                    </ul>
+                                </div>
+                            </li>
+                            @if (!String.IsNullOrEmpty(Context.Session.GetString("customer_email")))
+                            {
+                                <li class="menu-item"><a href="/Account/Orders">Đơn hàng của tôi</a></li>
+                            }
+                            else
+                            {
+                                <li></li>
+                            }
+                            <li>
+                                <span class="language-selector-wrapper">Language :</span>
+                                <div class="ht-language-trigger"><span>English</span></div>
+                                <div class="language ht-language">
+                                    <ul class="ht-setting-list">
+                                        <li class="active"><a href="#"><img src="~/Frontend/images/menu/flag-icon/1.jpg" alt="">English</a></li>
+                                        <li><a href="#"><img src="~/Frontend/images/menu/flag-icon/2.jpg" alt="">Français</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Header Top Right Area End Here -->
+            </div>
+        </div>
+    </div>
+    <!-- Header Top Area End Here -->
+    <!-- Begin Header Middle Area -->
+    <div class="header-middle pl-sm-0 pr-sm-0 pl-xs-0 pr-xs-0">
+        <div class="container">
+            <div class="row">
+                <!-- Begin Header Logo Area -->
+                <div class="col-lg-3">
+                    <div class="logo pb-sm-30 pb-xs-30">
+                        <a href="/Home">
+                            <img src="~/Frontend/images/menu/logo/1.jpg" alt="">
+                        </a>
+                    </div>
+                </div>
+                <!-- Header Logo Area End Here -->
+                <!-- Begin Header Middle Right Area -->
+                @* do trang chua co thu vien jquery nen can load jquery bang dong lenh duoi *@
+                <script language="javascript" src="~/Frontend/js/code.jquery.com_jquery-3.7.0.min.js"></script>
+                <div class="col-lg-9 pl-0 ml-sm-15 ml-xs-15">
+                    <div class="hm-searchbox">
+                        <!-- Begin Header Middle Searchbox Area -->
+                        <input type="text" onkeyup="search();" autocomplete="off" name="search" id="search" placeholder="Enter your search key ..." style="border:1px solid #fed700">
+                            <button onclick="location.href='/Products/SearchName?key='+document.getElementById('search').value;" form="form-search-top" class="li-btn" type="button"><i class="fa fa-search"></i></button>
+                            <ul class="smart-search">
+                            <li class="d-flex">
+                             
+                            </li>
+                           
+                            </ul>
+                   </div>
+                   
+                    <!-- Header Middle Searchbox Area End Here -->
+                    <!-- Begin Header Middle Right Area -->
+                    <div class="header-middle-right">
+                        <ul class="hm-menu">
+                            <!-- Begin Header Middle Wishlist Area -->
+                            <li class="hm-wishlist">
+                                <a href="wishlist.html">
+                                    <span class="cart-item-count wishlist-item-count">0</span>
+                                    <i class="fa fa-heart-o"></i>
+                                </a>
+                            </li>
+                            <!-- Header Middle Wishlist Area End Here -->
+                            <!-- Begin Header Mini Cart Area -->
+                            <li class="hm-minicart">
+                                <div class="hm-minicart-trigger">
+                                    <span class="item-icon"></span>
+                                    <span class="item-text">
+                                        $@Cart.CartTotal(Context.Session)
+                                        <span class="cart-item-count">@Cart.CartQuantity(Context.Session)</span>
+                                    </span>
+                                </div>
+                                <span></span>
+                                <div class="minicart">
+
+                                    <ul class="minicart-product-list">
+
+                                        @foreach (Item item_cart in cart)
+                                        {
+                                            var price_sale = item_cart.ProductRecord.Price * (100 - item_cart.ProductRecord.Discount) / 100;
+                                            <li>
+                                                <a href="single-product.html" class="minicart-product-image">
+                                                    <img src="~/Upload/Products/@item_cart.ProductRecord.Photo" alt="cart products">
+                                                </a>
+                                                <div class="minicart-product-details">
+                                                    <h6><a href="/Products/Detail/@item_cart.ProductRecord.Id">@item_cart.ProductRecord.Name</a></h6>
+                                                    <span style="font-weight:bold;color:red;">$@price_sale x @item_cart.Quantity</span>
+                                                </div>
+                                                <button class="close" title="Remove">
+                                                    <a href="/Cart/Remove/@item_cart.ProductRecord.Id">
+                                                        <i class="fa fa-close"></i>
+                                                    </a>
+                                                </button>
+                                            </li>
+                                        }
+                                    </ul>
+                                    <p class="minicart-total">Tổng số tiền: <span>$@Cart.CartTotal(Context.Session)</span></p>
+                                    <div class="minicart-button">
+                                        <a href="/Home" class="li-button li-button-fullwidth li-button-dark">
+                                            <span>Tiếp tục mua hàng</span>
+                                        </a>
+                                        <a href="/Cart/CheckOut" class="li-button li-button-fullwidth">
+                                            <span>Xác nhận mua đơn hàng</span>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </li>
+                            <!-- Header Mini Cart Area End Here -->
+                        </ul>
+                    </div>
+
+                    <!-- Header Middle Right Area End Here -->
+                </div>
+                <!-- Header Middle Right Area End Here -->
+                <script language="javascript">
+                    //de thuc hien ajax can kiem tra xem trang da load thu vien jquery chua bang code sau
+                    //$(document).ready(function(){ alert('ok'); });
+                    function search() {
+                        //lay gia tri cua id=search
+                        var key = document.getElementById("search").value;
+                        if (key == "") {
+                            //an smart-search
+                            $(".smart-search").attr("style", "display:none;");
+                        }
+                        else {
+                            //---
+                            //su dung ajax de goi den mot url, lay du lieu tra ve
+                            $.ajax({
+                                url: "/Products/AjaxSearch?key=" + key,
+                                success: function (result) {
+                                    //clear du lieu trong the ul
+                                    $(".smart-search").empty();
+                                    //do lai du lieu
+                                    $(".smart-search").append(result);
+                                }
+                            });
+                            //---
+                            //hien thi smart-search
+                            $(".smart-search").attr("style", "display:block;");
+                        }
+                    }
+                </script>
+                <style>
+                    .hr-searchbox {
+                        position: relative;
+                    }
+                    .smart-search img {
+                        width: 120px;
+                        height:120px;
+                        padding:10px;
+                    }
+                    .smart-search li{
+                        display: flex;
+                        border-top: 1px solid red;
+                        border-left: 1px solid #fed700;
+                    }
+                    .smart-search p{
+                        color:red;
+                      margin-left:50px;
+                    }
+                    .smart-search span{
+                        font-weight:bold;
+                      
+                    }
+                    .smart-search {
+                        position:absolute;
+                        margin:0px;
+                        margin-top:50px;
+                        list-style: none;
+                        z-index: 100;
+                        width: 600px;
+                        height:500px;
+                        background: white;
+                        display: none;
+                        overflow-y:scroll;
+                    }
+                </style>
+            </div>
+        </div>
+    </div>
+    <!-- Header Middle Area End Here -->
+    <!-- Begin Header Bottom Area -->
+    <div class="header-bottom header-sticky d-none d-lg-block d-xl-block">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- Begin Header Bottom Menu Area -->
+                    <div class="hb-menu">
+                        <nav>
+                            <ul>
+                                <li class="dropdown-holder">
+                                    <a href="/Home">Home</a>
+                                </li>
+                                <li class="megamenu-holder">
+                                    <a href="/Products/Category">Shop</a>
+                                </li>
+                                <li class="dropdown-holder">
+                                    <a href="/Cart">Cart</a>
+                                </li>
+                                <li>
+                                    <a href="/Contact">Contact</a>
+                                </li>
+
+
+                            </ul>
+                        </nav>
+                    </div>
+                    <!-- Header Bottom Menu Area End Here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header Bottom Area End Here -->
+    <!-- Begin Mobile Menu Area -->
+    <div class="mobile-menu-area d-lg-none d-xl-none col-12">
+        <div class="container">
+            <div class="row">
+                <div class="mobile-menu">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Mobile Menu Area End Here -->
+
+</header>

@@ -1,0 +1,43 @@
+﻿@{
+    //load file Layout2.cshtml vào đây
+    Layout = "~/Views/Shared/Layout1.cshtml";
+}
+<div class="col-sm-12 col-md-12 col-lg-6 col-xs-12">
+    @if (!String.IsNullOrEmpty(Context.Request.Query["notify"]) && Context.Request.Query["notify"] == "exists")
+    {
+        <div class="alert alert-danger">Email đã tồn tại!</div>
+    }
+    <form class="form-stl" action="/Account/RegisterPost" name="form-login" method="post">
+        <div class="login-form">
+            <h4 class="login-title">Create an account</h4>
+            <div class="row">
+                <div class="col-md-6 col-12 mb-20">
+                    <label>Name</label>
+                    <input class="mb-0" type="text" id="form-reg-lname" name="name" required placeholder="Input your Name*">
+                </div>
+                <div class="col-md-6 col-12 mb-20">
+                    <label>Phone</label>
+                    <input class="mb-0" type="text" id="form-reg-lphone" name="phone" required placeholder="Input your Phone*">
+                </div>
+                <div class="col-md-12 mb-20">
+                    <label>Email Address*</label>
+                    <input class="mb-0" type="email" id="form-reg-email" name="email" required placeholder="Input your Email address">
+                </div>
+                <div class="col-md-6 mb-20">
+                    <label>Password</label>
+                    <input class="mb-0" type="password" id="form-reg-password" name="password" required placeholder="Input your Password">
+                </div>
+                <div class="col-md-6 mb-20">
+                    <label>Address*</label>
+                    <input class="mb-0" type="text" id="form-reg-address" name="address" required placeholder="Input your Address">
+                </div>
+                <div class="col-12">
+                    <button class="register-button mt-0">Register</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+

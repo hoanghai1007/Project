@@ -1,0 +1,78 @@
+﻿@{
+    Layout = "~/Views/Shared/Layout1.cshtml";
+}
+@using BT1_project.Models
+<div class="Shopping-cart-area pt-60 pb-60">
+    <div class="container">
+        @if (Model.Count > 0)
+        {
+            <div class="row">
+                <div class="col-12">
+                    <form method ="post" action="/Cart/Update" id="frm-card">
+                        <div class="table-content table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="li-product-remove">remove</th>
+                                        <th class="li-product-thumbnail">images</th>
+                                        <th class="cart-product-name">Product</th>
+                                        <th class="li-product-price">Unit Price</th>
+                                        <th class="li-product-quantity">Quantity</th>
+                                        <th class="li-product-subtotal">Total</th>
+                                    </tr>
+                                </thead>
+                                @foreach (Item item_cart in Model)
+                                {
+                                    var price_sale = item_cart.ProductRecord.Price * (100 - item_cart.ProductRecord.Discount) / 100;
+                                    <tbody>
+                                        <tr style="padding:0px;">
+                                            <td class="li-product-remove"><a href="/Cart/Remove/@item_cart.ProductRecord.Id"><i class="fa fa-times"></i></a></td>
+                                            <td class="li-product-thumbnail"><a href="#"><img src="~/Upload/Products/@item_cart.ProductRecord.Photo" alt="Li's Product Image" style="width:100px; height:100px;"></a></td>
+                                            <td class="li-product-name"><a href="/Products/Detail/@item_cart.ProductRecord.Id" style="font-weight:bold;color:black;">@item_cart.ProductRecord.Name</a></td>
+                                            <td class="li-product-price" style="width:150px;"><span class="amount">$@price_sale</span></td>
+                                            <td class="quantity">
+                                                <div class="cart-plus-minus">
+                                                    <input class="cart-plus-minus-box" value="@item_cart.Quantity" type="text" name="product_@item_cart.ProductRecord.Id">
+                                                    <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
+                                                    <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
+                                                </div>
+                                            </td>
+                                            <td class="product-subtotal" style="width:150px;"><span class="amount" style="color:red;">$@(item_cart.Quantity * price_sale)</span></td>
+                                        </tr>
+                                    </tbody>
+                                }
+
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="coupon-all">
+                                    <div class="coupon">
+                                        <a class="link-to-shop" href="/Home" style="border:1px solid black;background-color:#808080;color:white;padding-top:10px;padding-bottom:10px;">Continue Shopping</a>
+                                    </div>
+                                    <div class="coupon2">
+                                        <input class="button" name="update_cart" value="Update Shopping Cart" type="submit">
+                                        <a class="btn btn-clear" href="/Cart/Destroy" style="border:1px solid black;background-color:#808080;color:white;padding-top:10px;padding-bottom:10px;">Clear Shopping Cart</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 ml-auto">
+                                <div class="cart-page-total">
+                                    <h5>Cart totals</h5>
+                                    <ul>
+                                        <li>Total <span>$@Cart.CartTotal(Context.Session)</span></li>
+                                    </ul>
+                                    <a href="/Cart/CheckOut">Proceed to checkout</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+

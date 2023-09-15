@@ -1,0 +1,48 @@
+﻿@{
+    Layout = "~/Views/Shared/Layout1.cshtml";
+}
+@using BT1_project.Models
+@functions {
+    public MyDbContext db = new MyDbContext();
+    public List<ItemOrder> GetOrders()
+    {
+        var list_record = db.Orders.Where(item => item.CustomerId == Convert.ToInt32(Context.Session.GetString("customer_id"))).OrderByDescending(item => item.Id).ToList();
+        return list_record;
+    }
+}
+<div class="col-lg-9 order-1 order-lg-2" style="margin-left:100px;">
+    <div class="single-banner shop-page-banner" style="margin-left:50px;">
+        <table class="table" style="width:150%;">
+            <tr>
+                <th>Ngày mua</th>
+                <th>Giá tiền</th>
+                <th>Trạng thái</th>
+            </tr>
+            @{
+                var orders = GetOrders();
+            }
+            @foreach (var item in orders)
+            {
+                <tr>
+                    <td>@DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                    <td style="color:red;">$@item.Price</td>
+                    <td>
+                        @if (item.Status == 0)
+                        {
+                            <span class="label label-primary" style="border-radius:7px; background-color:#6B8E23;padding:6px; color:white; font-weight:bold; width:10px;height:5px;">Chưa giao hàng</span>
+                            <a href="/Account/RemoveOrders/@item.Id" class="label label-primary" style="border-radius:7px; background-color:#FF8C00;padding:6px; color:white; font-weight:bold;">Hủy Đơn hàng</a>
+                        }
+                        else if (item.Status == 1)
+                        {
+                            <span class="label label-danger" style="border-radius:7px; background-color:#FF4500;padding:6px; color:white; font-weight:bold;">Đã giao hàng</span>
+                        }
+                        else if (item.Status == 2)
+                        {
+                            <span class="label label-warning" style="border-radius:7px; background-color:#0000FF;padding:6px; color:white; font-weight:bold;">Đã hủy</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+</div>
+</div>
